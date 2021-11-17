@@ -35,34 +35,30 @@ Since all edges are undirected, [0, 1] is the same as [1, 0] and thus will not a
 ```java
 class Solution {
     public int countComponents(int n, int[][] edges) {
-        if(n < 1 || edges == null)
-            return 0;
+        int components = 0;
         int[][] adjMat = new int[n][n];
-        for(int i = 0; i < n; i++) {
-            adjMat[i][i] = 1;
-        }
         for(int[] edge : edges) {
-            adjMat[edge[0]][edge[1]] = 1;
-            adjMat[edge[1]][edge[0]] = 1;
+            int u = edge[0];
+            int v = edge[1];
+            adjMat[u][v] = 1;
+            adjMat[v][u] = 1;
         }
-        
-        int[] visited = new int[n];
-        int count = 0;
+        boolean[] visited = new boolean[n];
         for(int i = 0; i < n; i++) {
-            if(visited[i] == 0) {
-                visited[i] = 1;
-                count++;
-                dfs(adjMat, visited, i);
+            if(!visited[i]) {
+                components++;
+                visited[i] = true;
+                visitNeighbors(i, adjMat, visited);
             }
         }
-        return count;
+        return components;
     }
     
-    private void dfs(int[][] adjMat, int[] visited, int i) {
-        for(int j = 0; j < adjMat.length; j++) {
-            if(adjMat[i][j] == 1 && visited[j] == 0) {
-                visited[j] = 1;
-                dfs(adjMat, visited, j);
+    private void visitNeighbors(int vertex , int[][] adjMat, boolean[] visited) {
+        for(int v = 0; v < adjMat.length; v++) {
+            if(adjMat[vertex][v] == 1 && !visited[v]) {
+                visited[v] = true;
+                visitNeighbors(v, adjMat, visited);
             }
         }
     }
