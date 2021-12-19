@@ -104,3 +104,48 @@ class Solution {
     
 }
 ```
+
+# Implementation 3 : Union Find (With Path Compression)
+```java
+class Solution {
+    public int countComponents(int n, int[][] edges) {
+       if(n <= 0)
+           return 0;
+       int[] parents = new int[n];
+       for(int i = 0; i < n; i++)
+           parents[i] = i;
+       for(int[] edge : edges) {
+           union(edge[0], edge[1], parents);
+       } 
+       Set<Integer> uniqueParents = new HashSet<>(); 
+       for(int i = 0; i < n; i++) {
+           int j = i;
+           while(parents[j] != j) {
+               j = parents[j];
+           }
+           uniqueParents.add(j);
+       } 
+       return uniqueParents.size(); 
+    }
+    
+    private void union(int vertex1, int vertex2, int[] parents) {
+        int parent1 = find(vertex1, parents);
+        int parent2 = find(vertex2, parents);
+        if(parent1 != parent2) {
+            parents[parent1] = parent2;
+        }
+    }
+    
+    private int find(int vertex, int[] parents) {
+        if(parents[vertex] == vertex)
+            return vertex;
+        int result = find(parents[vertex], parents);
+        // before returning save the set(connected component)'s leader node id
+        // this will save time, next time when we have to lookup the set's leader node
+        parents[vertex] = result; 
+        return result;
+    }
+    
+}
+```
+
