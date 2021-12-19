@@ -149,3 +149,40 @@ class Solution {
 }
 ```
 
+## Implementation 4 : Union Find (Path Compression) , using find() to build the answer
+```java
+class Solution {
+    public int countComponents(int n, int[][] edges) {
+       if(n <= 0)
+           return 0;
+       int[] parents = new int[n];
+       for(int i = 0; i < n; i++)
+           parents[i] = i;
+       for(int[] edge : edges) {
+           union(edge[0], edge[1], parents);
+       } 
+       Set<Integer> leaders = new HashSet<>(); 
+       for(int i = 0; i < n; i++) {
+           leaders.add(find(i, parents));
+       } 
+       return leaders.size(); 
+    }
+    
+    private void union(int vertex1, int vertex2, int[] parents) {
+        int parent1 = find(vertex1, parents);
+        int parent2 = find(vertex2, parents);
+        parents[parent1] = parent2;
+    }
+    
+    private int find(int vertex, int[] parents) {
+        if(parents[vertex] == vertex)
+            return vertex;
+        int result = find(parents[vertex], parents);
+        parents[vertex] = result;
+        return result;
+    }
+    
+}
+```
+
+
