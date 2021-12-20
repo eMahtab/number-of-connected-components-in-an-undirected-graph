@@ -184,6 +184,51 @@ class Solution {
     
 }
 ```
+# Implementation 5 : Union Find (Path Compression + Union by Rank)
+```java
+class Solution {
+    public int countComponents(int n, int[][] edges) {
+       if(n <= 0)
+           return 0;
+       int[] parents = new int[n];
+       int[] rank = new int[n]; 
+       for(int i = 0; i < n; i++) {
+            parents[i] = i;
+            rank[i] = 1;
+       }
+       for(int[] edge : edges) {
+           union(edge[0], edge[1], parents, rank);
+       } 
+       Set<Integer> leaders = new HashSet<>(); 
+       for(int i = 0; i < n; i++) {
+           leaders.add(find(i, parents));
+       } 
+       return leaders.size(); 
+    }
+    
+    private void union(int vertex1, int vertex2, int[] parents, int[] rank) {
+        int parent1 = find(vertex1, parents);
+        int parent2 = find(vertex2, parents);
+        if(rank[parent1] > rank[parent2]) {
+            parents[parent2] = parent1;
+        } else if(rank[parent1] < rank[parent2]) {
+            parents[parent1] = parent2;
+        } else {
+            parents[parent2] = parent1;
+            rank[parent1]++;
+        }
+    }
+    
+    private int find(int vertex, int[] parents) {
+        if(parents[vertex] == vertex)
+            return vertex;
+        int result = find(parents[vertex], parents);
+        parents[vertex] = result;
+        return result;
+    }
+    
+}
+```
 
 # References :
 1. https://www.youtube.com/watch?v=qHZxfNKUMXw (Hindi, very good explanation)
