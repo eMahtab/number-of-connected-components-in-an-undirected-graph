@@ -109,7 +109,7 @@ class Solution {
 }
 ```
 
-# Implementation 2 : Union Find (Without Path Compression)
+# Implementation 3a : Union Find (Without Path Compression)
 ```java
 class Solution {
     public int countComponents(int n, int[][] edges) {
@@ -149,7 +149,7 @@ class Solution {
 }
 ```
 
-# Implementation 3 : Union Find (With Path Compression)
+# Implementation 3b : Union Find (With Path Compression)
 ```java
 class Solution {
     public int countComponents(int n, int[][] edges) {
@@ -193,7 +193,7 @@ class Solution {
 }
 ```
 
-## Implementation 4 : Union Find (Path Compression) , using find() to build the answer
+## Implementation 3c : Union Find (Path Compression) , using find() to build the answer
 ```java
 class Solution {
     public int countComponents(int n, int[][] edges) {
@@ -228,7 +228,7 @@ class Solution {
     
 }
 ```
-# Implementation 5 : Union Find (Path Compression + Union by Rank)
+# Implementation 3d : Union Find (Path Compression + Union by Rank)
 ```java
 class Solution {
     public int countComponents(int n, int[][] edges) {
