@@ -70,6 +70,45 @@ class Solution {
 }
 ```
 
+# Implementation 2 : BFS
+```java
+class Solution {
+    public int countComponents(int n, int[][] edges) {
+        Map<Integer,Set<Integer>> graph = new HashMap<>();
+        for(int[] edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            graph.putIfAbsent(u, new HashSet<Integer>());
+            graph.get(u).add(v);
+            graph.putIfAbsent(v, new HashSet<Integer>());
+            graph.get(v).add(u);
+        }
+        int components = 0;
+        Set<Integer> visited = new HashSet<>();
+        Queue<Integer> queue = new LinkedList<>();
+        for(int vertex = 0; vertex < n; vertex++) {
+           if(!visited.contains(vertex)) {
+              components++;
+              queue.add(vertex);
+              while(!queue.isEmpty()) {
+                 int v = queue.remove();
+                 if(visited.contains(v)) continue;
+                 visited.add(v);
+                 Set<Integer> neighbors = graph.get(v);
+                 if(neighbors != null) {
+                    for(int neighbor : neighbors) {
+                       if(!visited.contains(neighbor))
+                         queue.add(neighbor);
+                    }
+                 }
+              } 
+           }
+        }
+        return components;
+    }
+}
+```
+
 # Implementation 2 : Union Find (Without Path Compression)
 ```java
 class Solution {
