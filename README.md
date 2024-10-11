@@ -31,36 +31,41 @@ You can assume that no duplicate edges will appear in edges.
 
 Since all edges are undirected, [0, 1] is the same as [1, 0] and thus will not appear together in edges.
 
-# Implementation : DFS
+# Implementation 1 : DFS
 ```java
 class Solution {
     public int countComponents(int n, int[][] edges) {
-        int components = 0;
-        int[][] adjMat = new int[n][n];
+        Map<Integer,Set<Integer>> graph = new HashMap<>();
         for(int[] edge : edges) {
             int u = edge[0];
             int v = edge[1];
-            adjMat[u][v] = 1;
-            adjMat[v][u] = 1;
+            graph.putIfAbsent(u, new HashSet<Integer>());
+            graph.get(u).add(v);
+            graph.putIfAbsent(v, new HashSet<Integer>());
+            graph.get(v).add(u);
         }
-        boolean[] visited = new boolean[n];
-        for(int i = 0; i < n; i++) {
-            if(!visited[i]) {
+        int components = 0;
+        Set<Integer> visited = new HashSet<>();
+        for(int vertex = 0; vertex < n; vertex++) {
+            if(!visited.contains(vertex)) {
                 components++;
-                visited[i] = true;
-                visitNeighbors(i, adjMat, visited);
+                visitVertex(vertex, graph, visited);
             }
         }
         return components;
     }
-    
-    private void visitNeighbors(int vertex , int[][] adjMat, boolean[] visited) {
-        for(int v = 0; v < adjMat.length; v++) {
-            if(adjMat[vertex][v] == 1 && !visited[v]) {
-                visited[v] = true;
-                visitNeighbors(v, adjMat, visited);
-            }
-        }
+
+    private void visitVertex(int vertex, Map<Integer,Set<Integer>> graph, Set<Integer> visited) {
+        if(visited.contains(vertex))
+           return;
+        visited.add(vertex);
+        Set<Integer> neighbors = graph.get(vertex);
+        if(neighbors != null) {
+            for(int neighbor : neighbors) {
+                if(!visited.contains(neighbor))
+                  visitVertex(neighbor, graph, visited);
+            }  
+        } 
     }
 }
 ```
